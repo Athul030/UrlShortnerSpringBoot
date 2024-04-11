@@ -7,6 +7,6 @@ import com.athul.urlsShort.entity.Url;
 public interface UrlService {
 
      UrlResponseDTO generateShortLink(UrlDTO urlDTO);
-     Url getEncodedUrl(String url);
+     Url getOriginalUrl(String url);
      void deleteShortLink(Url url);
 }

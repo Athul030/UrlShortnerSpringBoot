@@ -19,16 +19,19 @@ public class UrlServiceImpl implements UrlService{
     private final UrlRepository urlRepository;
     @Override
     public UrlResponseDTO generateShortLink(UrlDTO urlDTO) {
-            String encodedUrl = encodeUrl(urlDTO.getOriginalUrl());
+            String shortUrlCode = createShortLink(urlDTO.getOriginalUrl());
             Url urlToPersist = new Url();
             urlToPersist.setCreationDate(LocalDateTime.now());
-            urlToPersist.setShortLink(encodedUrl);
+            urlToPersist.setShortLink(shortUrlCode);
+            urlToPersist.setOriginalUrl(urlDTO.getOriginalUrl());
+            urlToPersist.setExpirationDate(LocalDateTime.now().plusHours(24));
             Url urlToReturn  = urlRepository.save(urlToPersist);
 
             if(urlToReturn!=null){
                 UrlResponseDTO urlResponseDTO = new UrlResponseDTO();
+                urlResponseDTO.setExpirationDate(urlToReturn.getExpirationDate().toString());
                 urlResponseDTO.setOriginalUrl(urlToReturn.getOriginalUrl());
-                urlResponseDTO.setShortLink(urlToReturn.getOriginalUrl());
+                urlResponseDTO.setShortLink(urlToReturn.getShortLink());
                 return urlResponseDTO;
             }else{
                 return null;
@@ -36,17 +39,17 @@ public class UrlServiceImpl implements UrlService{
 
     }
 
-    private String encodeUrl(String url) {
-        String encodedUrl = "";
+    private String createShortLink(String url) {
+        String shortUrlCode = "";
         LocalDateTime time = LocalDateTime.now();
-        encodedUrl = Hashing.murmur3_32_fixed().hashString(url.concat(time.toString()), StandardCharsets.UTF_8).toString();
-        return encodedUrl;
+        shortUrlCode = Hashing.murmur3_32_fixed().hashString(url.concat(time.toString()), StandardCharsets.UTF_8).toString();
+        return shortUrlCode;
     }
 
 
 
     @Override
-    public Url getEncodedUrl(String url) {
+    public Url getOriginalUrl(String url) {
         return urlRepository.findByShortLink(url);
     }
 
