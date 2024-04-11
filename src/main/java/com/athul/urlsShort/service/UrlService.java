@@ -9,4 +9,5 @@ public interface UrlService {
      UrlResponseDTO generateShortLink(UrlDTO urlDTO);
      Url getOriginalUrl(String url);
      void deleteShortLink(Url url);
+     boolean isUrlValid(String url);
 }

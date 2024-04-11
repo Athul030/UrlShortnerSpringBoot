@@ -22,6 +22,7 @@ public class UrlShortenerController {
 
     @PostMapping("/generate")
     public ResponseEntity<?> generateShortLink(@RequestBody UrlDTO urlDTO){
+        if(urlService.isUrlValid(urlDTO.getOriginalUrl())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please Enter valid url");
         UrlResponseDTO urlResponseDTO = urlService.generateShortLink(urlDTO);
         if(urlResponseDTO!=null){
             return new ResponseEntity<>(urlResponseDTO, HttpStatus.OK);

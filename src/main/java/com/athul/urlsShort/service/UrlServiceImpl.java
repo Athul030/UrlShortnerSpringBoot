@@ -7,6 +7,7 @@ import com.athul.urlsShort.entity.Url;
 import com.google.common.hash.Hashing;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -20,6 +21,7 @@ public class UrlServiceImpl implements UrlService{
     @Override
     public UrlResponseDTO generateShortLink(UrlDTO urlDTO) {
             String shortUrlCode = createShortLink(urlDTO.getOriginalUrl());
+
             Url urlToPersist = new Url();
             urlToPersist.setCreationDate(LocalDateTime.now());
             urlToPersist.setShortLink(shortUrlCode);
@@ -37,6 +39,11 @@ public class UrlServiceImpl implements UrlService{
                 return null;
             }
 
+    }
+
+    public boolean isUrlValid(String url){
+        boolean result = UrlValidator.getInstance().isValid(url);
+        return result;
     }
 
     private String createShortLink(String url) {
