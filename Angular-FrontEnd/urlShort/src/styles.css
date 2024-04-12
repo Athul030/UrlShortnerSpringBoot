@@ -1,1 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  background: linear-gradient(135deg, #000000 0%, #434343 100%);
+  color: #fff;
+  height: 100vh;
+  display: flex;
+
+}
+
+.appRoot{
+  padding-bottom: 6%;
+  width: 50%;
+  align-items: center;
+  margin: auto;
+}
+
+
